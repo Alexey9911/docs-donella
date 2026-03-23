@@ -1,0 +1,139 @@
+---
+title: "Natural Language Execution"
+description: "Convert text commands into Solana transactions"
+icon: "message"
+---
+
+Bookie's NLP engine parses natural language input and extracts transaction parameters without requiring complex UI interactions.
+
+## Supported Commands
+
+### Token Swaps
+
+```text
+Swap 10 SOL for USDC
+```
+
+```text
+Exchange 100 USDC for BONK with 2% slippage
+```
+
+```text
+Trade 50 USDC to JUP
+```
+
+### Token Transfers
+
+```text
+Send 5 USDC to 7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
+```
+
+```text
+Transfer 0.1 SOL to alice.sol
+```
+
+### Portfolio Queries
+
+```text
+Show my balance
+```
+
+```text
+What's my portfolio worth?
+```
+
+```text
+Display transaction history
+```
+
+### Price Checks
+
+```text
+What's the price of JUP?
+```
+
+```text
+Show me SOL price in USD
+```
+
+## Entity Extraction
+
+The intent parser identifies key components from your command:
+
+| Entity | Example | Description |
+|--------|---------|-------------|
+| **Action** | swap, send, show | Operation type |
+| **Input Token** | SOL, USDC | Source token |
+| **Output Token** | BONK, JUP | Destination token |
+| **Amount** | 10, 0.5 | Quantity to transact |
+| **Slippage** | 1%, 2% | Maximum acceptable slippage |
+| **Address** | 7xKXtg... | Recipient wallet |
+
+## Processing Flow
+
+<Steps>
+  <Step title="Tokenization">
+    Input text is split into tokens and normalized
+  </Step>
+  <Step title="Entity Recognition">
+    NLP model identifies tokens, amounts, and addresses
+  </Step>
+  <Step title="Intent Classification">
+    Command categorized as swap, transfer, or query
+  </Step>
+  <Step title="Parameter Validation">
+    Extracted values checked for validity and completeness
+  </Step>
+  <Step title="Transaction Construction">
+    Valid parameters passed to routing or execution layer
+  </Step>
+</Steps>
+
+## Slippage Configuration
+
+Default slippage is 0.5% (50 basis points). Override with explicit commands:
+
+```text
+Swap 100 USDC for SOL with 1% slippage
+```
+
+```text
+Trade 50 USDC to BONK, max slippage 2%
+```
+
+<Warning>
+  Higher slippage increases execution probability but may result in worse prices. Use minimum slippage necessary for your trade size.
+</Warning>
+
+## Address Formats
+
+Bookie supports multiple address formats:
+
+- **Full Solana Address:** `7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU`
+- **SNS Domains:** `alice.sol`, `bob.sol`
+- **Shortened Format:** `7xKX...gAsU` (must be unambiguous)
+
+## Error Handling
+
+If the parser cannot extract required parameters, Bookie will prompt for clarification:
+
+**User:** "Swap SOL"
+
+**Bookie:** "How much SOL would you like to swap, and for which token?"
+
+**User:** "10 SOL for USDC"
+
+**Bookie:** *Proceeds with transaction*
+
+## Performance
+
+| Metric | Value |
+|--------|-------|
+| Parse Time (p50) | 42ms |
+| Parse Time (p99) | 78ms |
+| Entity Accuracy | 97.3% |
+| Intent Accuracy | 99.1% |
+
+<Note>
+  The NLP model is continuously improved based on user interactions. Ambiguous commands help train better entity recognition.
+</Note>

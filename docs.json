@@ -1,122 +1,133 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
-  "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+  "name": "Bookie",
+  "logo": {
+    "light": "/logo/dark.svg",
+    "dark": "/logo/light.svg"
   },
   "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#f97316",
+    "light": "#fb923c",
+    "dark": "#ea580c"
+  },
+  "appearance": {
+    "default": "light"
+  },
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "icon": "github",
+          "href": "https://github.com/Bookiepmndrs/bookie-repo"
+        },
+        {
+          "anchor": "Twitter",
+          "icon": "x-twitter",
+          "href": "https://x.com/bookiedfi_bot"
+        },
+        {
+          "anchor": "Telegram",
+          "icon": "telegram",
+          "href": "https://t.me/bookiedfi_bot"
+        }
+      ]
+    },
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "GETTING STARTED",
+            "icon": "bolt",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "introduction/quickstart",
+              "introduction/architecture"
             ]
           },
           {
-            "group": "Customization",
+            "group": "CORE FEATURES",
+            "icon": "brain",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "core-features/natural-language",
+              "core-features/jupiter-integration",
+              "core-features/portfolio-tracking",
+              "core-features/transaction-speed"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "SECURITY",
+            "icon": "shield",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "integrations/solana",
+              "integrations/wallet-security",
+              "integrations/transaction-simulation"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Introduction",
+            "icon": "book",
             "pages": [
-              "api-reference/introduction"
+              "api-reference/introduction",
+              "api-reference/authentication"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Intent Operations",
+            "icon": "brain",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/sessions/create-session",
+              "api-reference/sessions/delete-session"
+            ]
+          },
+          {
+            "group": "Portfolio & Prices",
+            "icon": "wallet",
+            "pages": [
+              "api-reference/sessions/get-session",
+              "api-reference/messages/send-message"
+            ]
+          },
+          {
+            "group": "Transaction History",
+            "icon": "clock-rotate-left",
+            "pages": [
+              "api-reference/messages/get-history"
+            ]
+          },
+          {
+            "group": "Analytics",
+            "icon": "chart-line",
+            "pages": [
+              "api-reference/analytics/get-metrics",
+              "api-reference/analytics/get-usage"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    ]
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Try Bookie",
+      "href": "https://bookiebot.dev"
     }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/bookiedfi_bot",
+      "github": "https://github.com/Bookiepmndrs/bookie-repo",
+      "telegram": "https://t.me/bookiedfi_bot",
+      "website": "https://bookiebot.dev"
     }
   }
 }

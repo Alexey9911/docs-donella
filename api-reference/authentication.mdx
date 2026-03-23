@@ -1,0 +1,104 @@
+---
+title: "Authentication"
+description: "Learn how to authenticate with the Bookie API"
+icon: "key"
+---
+
+All API requests require authentication via Bearer token in the Authorization header.
+
+## API Keys
+
+Generate API keys from the Developer Dashboard at bookiebot.dev/dashboard
+
+### Key Format
+
+```
+bookie_live_abc123def456
+bookie_test_xyz789ghi012
+```
+
+- `live_` prefix for production keys
+- `test_` prefix for development keys
+
+### Using API Keys
+
+Include the API key in the Authorization header:
+
+```bash
+curl --request GET \
+  --url https://api.bookie.app/v1/portfolio \
+  --header 'Authorization: Bearer bookie_live_abc123def456'
+```
+
+## Key Management
+
+### Creating Keys
+
+```bash
+POST /v1/keys
+```
+
+```json
+{
+  "name": "Production API Key",
+  "scopes": ["read:portfolio", "write:intents"],
+  "expiresAt": "2025-03-08T00:00:00Z"
+}
+```
+
+### Revoking Keys
+
+```bash
+DELETE /v1/keys/{keyId}
+```
+
+### Rotating Keys
+
+```bash
+POST /v1/keys/{keyId}/rotate
+```
+
+Returns a new key while keeping the old key active for 24 hours.
+
+## Scopes
+
+Control API access with granular scopes:
+
+| Scope | Description |
+|-------|-------------|
+| `read:portfolio` | View wallet balances and holdings |
+| `read:transactions` | View transaction history |
+| `write:intents` | Parse natural language commands |
+| `write:transactions` | Build transaction objects |
+| `read:prices` | Access token price data |
+| `admin` | Full account access |
+
+## Security Best Practices
+
+### Environment Variables
+
+```typescript
+const bookie = new BookieSDK({
+  apiKey: process.env.BOOKIE_API_KEY
+});
+```
+
+### Key Rotation
+
+Rotate keys every 90 days for security.
+
+### Least Privilege
+
+Grant only required scopes to each key.
+
+### Monitoring
+
+Monitor key usage in the dashboard for suspicious activity.
+
+<Warning>
+  Never expose API keys in client-side code, public repositories, or logs. If a key is compromised, revoke it immediately.
+</Warning>
+
+<Note>
+  Test keys are limited to 100 requests per day and can only interact with Solana devnet.
+</Note>

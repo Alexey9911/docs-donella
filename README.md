@@ -1,55 +1,70 @@
-# Mintlify Starter Kit
+# Bookie Documentation
 
-Use the starter kit to get your docs deployed and ready to customize.
+Official documentation for [Bookie](https://bookie.app) - an AI-powered autonomous agent for executing DeFi operations on Solana using natural language.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+## About Bookie
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+Bookie converts natural language commands into Solana transactions, enabling users to swap tokens, send funds, and track portfolios without complex interfaces. Built with Jupiter V6 integration for optimal liquidity routing and sub-second execution speeds.
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+## Documentation Structure
 
-## AI-assisted writing
+- **Getting Started** - Quickstart guide and architecture overview
+- **Core Features** - Natural language execution, Jupiter integration, portfolio tracking, transaction speed
+- **Security** - Solana integration, wallet security, transaction simulation
+- **API Reference** - REST API endpoints for developers
 
-Set up your AI coding tool to work with Mintlify:
+## Local Development
+
+Install Mintlify CLI:
 
 ```bash
-npx skills add https://mintlify.com/docs
+npm install -g mint
 ```
 
-This command installs Mintlify's documentation skill for your configured AI tools like Claude Code, Cursor, Windsurf, and others. The skill includes component reference, writing standards, and workflow guidance.
+Preview documentation locally:
 
-See the [AI tools guides](/ai-tools) for tool-specific setup.
-
-## Development
-
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
-
-```
-npm i -g mint
-```
-
-Run the following command at the root of your documentation, where your `docs.json` is located:
-
-```
+```bash
 mint dev
+```
+
+Check for broken links:
+
+```bash
+mint broken-links
 ```
 
 View your local preview at `http://localhost:3000`.
 
-## Publishing changes
+## Project Structure
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+```
+.
+├── docs.json              # Mintlify configuration
+├── index.mdx              # Homepage
+├── introduction/          # Getting started guides
+├── core-features/         # Feature documentation
+├── integrations/          # Security and Solana integration
+└── api-reference/         # API documentation
+```
 
-## Need help?
+## Design System
 
-### Troubleshooting
+- **Default Theme:** Light mode (white background)
+- **Primary Color:** Orange (#f97316)
+- **Accent Color:** Yellow-orange (#facc15)
+- **Hover Color:** Dark orange (#ea580c)
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+## Contributing
 
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing to the documentation.
+
+## Links
+
+- [Bookie App](https://bookiebot.dev)
+- [GitHub](https://github.com/Bookiepmndrs/bookie-repo)
+- [Twitter](https://x.com/bookiedfi_bot)
+- [Telegram](https://t.me/bookiedfi_bot)
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.

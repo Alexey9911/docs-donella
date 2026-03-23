@@ -1,0 +1,137 @@
+---
+title: "Build Transaction"
+api: "POST https://api.bookie.app/v1/transactions/build"
+description: "Build a Solana transaction from parsed intent"
+---
+
+### Authorization
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token. Format: `Bearer bookie_live_abc123def456`
+</ParamField>
+
+### Body Parameters
+
+<ParamField body="intentId" type="string" required>
+  Intent ID from parse intent endpoint
+</ParamField>
+
+<ParamField body="walletAddress" type="string" required>
+  Solana wallet address that will sign the transaction
+</ParamField>
+
+<ParamField body="simulate" type="boolean" default="true">
+  Run pre-flight simulation before building
+</ParamField>
+
+### Response
+
+<ResponseField name="transaction" type="string">
+  Base64 encoded serialized transaction
+</ResponseField>
+
+<ResponseField name="simulation" type="object">
+  Simulation results (if enabled)
+  
+  Properties:
+  - `success` (boolean): Whether simulation passed
+  - `computeUnits` (number): Compute units consumed
+  - `logs` (array): Program execution logs
+</ResponseField>
+
+<ResponseField name="expectedOutput" type="object">
+  Expected transaction outcome
+  
+  Properties:
+  - `outputAmount` (string): Expected output amount
+  - `priceImpact` (number): Price impact percentage
+  - `fee` (number): Transaction fee in lamports
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request POST \
+  --url https://api.bookie.app/v1/transactions/build \
+  --header 'Authorization: Bearer bookie_live_abc123def456' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "intentId": "intent_abc123def456",
+    "walletAddress": "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+    "simulate": true
+  }'
+```
+
+```javascript Node.js
+const response = await fetch(
+  'https://api.bookie.app/v1/transactions/build',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.BOOKIE_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      intentId: 'intent_abc123def456',
+      walletAddress: '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
+      simulate: true
+    })
+  }
+);
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.bookie.app/v1/transactions/build',
+    headers={
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'intentId': 'intent_abc123def456',
+        'walletAddress': '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
+        'simulate': True
+    }
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 - Success
+{
+  "transaction": "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAHEAoMCg...",
+  "simulation": {
+    "success": true,
+    "computeUnits": 185432,
+    "logs": [
+      "Program JUP6LkbZbjS1jKKwapdH673ZbPzwpKeZ9wH2TUXzQf4 invoke [1]",
+      "Program log: Instruction: Swap",
+      "Program JUP6LkbZbjS1jKKwapdH673ZbPzwpKeZ9wH2TUXzQf4 success"
+    ]
+  },
+  "expectedOutput": {
+    "outputAmount": "736250000",
+    "priceImpact": 0.12,
+    "fee": 5000
+  }
+}
+```
+
+```json 400 - Simulation Failed
+{
+  "error": {
+    "code": "simulation_failed",
+    "message": "Transaction simulation failed",
+    "details": {
+      "reason": "Slippage tolerance exceeded",
+      "logs": ["Program log: Error: Slippage tolerance exceeded"]
+    }
+  }
+}
+```
+</ResponseExample>
+
+<Warning>
+  Always simulate transactions before presenting them to users. Failed simulations indicate the transaction would fail on-chain.
+</Warning>

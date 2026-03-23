@@ -1,0 +1,123 @@
+---
+title: "Architecture"
+description: "Technical architecture and transaction pipeline"
+icon: "sitemap"
+---
+
+Bookie uses a multi-stage pipeline to convert natural language into executable Solana transactions with sub-second latency.
+
+## System Overview
+
+**Intent Layer** - NLP model extracts entities (tokens, amounts, addresses) from natural language input.
+
+**Routing Layer** - Jupiter V6 integration calculates optimal swap paths across Solana DEXs.
+
+**Execution Layer** - Transaction builder, simulator, and broadcaster handle Solana interaction.
+
+## Transaction Pipeline
+
+### 1. Intent Parser Service
+
+Converts natural language to structured transaction parameters.
+
+**Input:** "Swap 5 SOL for USDC"
+
+**Output:**
+```json
+{
+  "action": "swap",
+  "inputToken": "So11111111111111111111111111111111111111112",
+  "outputToken": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+  "amount": 5000000000,
+  "slippage": 50
+}
+```
+
+**Processing Time:** ~40ms
+
+### 2. Route Calculation
+
+Jupiter V6 SDK queries liquidity pools and calculates optimal routing.
+
+| Pool Type | Supported |
+|-----------|-----------|
+| Orca Whirlpools | Yes |
+| Raydium AMM | Yes |
+| Meteora DLMM | Yes |
+| Phoenix | Yes |
+
+**Processing Time:** ~110ms
+
+### 3. Transaction Simulation
+
+Pre-flight simulation prevents failed transactions and unexpected slippage.
+
+```typescript
+const simulation = await connection.simulateTransaction(transaction);
+
+if (simulation.value.err) {
+  throw new Error('Transaction would fail');
+}
+```
+
+**Processing Time:** ~8ms
+
+### 4. User Approval
+
+Transaction presented to wallet for manual confirmation. Bookie never accesses private keys.
+
+### 5. Broadcast & Monitoring
+
+Transaction sent to Solana with WebSocket monitoring for confirmation.
+
+**Processing Time:** ~3ms broadcast + network confirmation
+
+## Security Architecture
+
+<CardGroup cols={2}>
+  <Card title="Non-Custodial" icon="shield">
+    Read-only wallet connection. Private keys never leave user's device
+  </Card>
+  <Card title="Simulation First" icon="vial">
+    All transactions simulated before user approval
+  </Card>
+  <Card title="Transparent Routing" icon="route">
+    Full visibility into swap paths and price impact
+  </Card>
+  <Card title="Slippage Protection" icon="gauge">
+    Configurable slippage limits prevent sandwich attacks
+  </Card>
+</CardGroup>
+
+## Performance Metrics
+
+| Stage | Latency (p50) | Latency (p99) |
+|-------|---------------|---------------|
+| Intent Parsing | 42ms | 78ms |
+| Route Calculation | 110ms | 245ms |
+| Transaction Build | 8ms | 15ms |
+| Simulation | 12ms | 28ms |
+| Broadcast | 3ms | 8ms |
+| **Total Pipeline** | **175ms** | **374ms** |
+
+## Jupiter V6 Integration
+
+Bookie uses Jupiter's aggregator to access deep liquidity across Solana.
+
+**Benefits:**
+- Best price execution across all DEXs
+- Automatic route splitting for large orders
+- MEV protection through private transaction submission
+- Real-time price impact calculation
+
+## State Management
+
+Bookie maintains minimal state for optimal performance:
+
+- Active wallet connection (session-based)
+- Recent transaction history (client-side cache)
+- Portfolio balances (refreshed on-demand)
+
+<Note>
+  Bookie does not store private keys, transaction history, or personal data on servers. All sensitive operations occur client-side.
+</Note>

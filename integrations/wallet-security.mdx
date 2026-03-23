@@ -1,0 +1,166 @@
+---
+title: "Wallet Security"
+description: "Best practices for secure DeFi interactions"
+icon: "shield"
+---
+
+Bookie is designed with security as a core principle. Understanding wallet security best practices is essential for safe DeFi operations.
+
+## Non-Custodial Architecture
+
+Bookie never has access to your private keys or seed phrases.
+
+<CardGroup cols={2}>
+  <Card title="Read-Only Connection" icon="eye">
+    Bookie only reads your public wallet address
+  </Card>
+  <Card title="Manual Approval" icon="hand">
+    Every transaction requires your explicit confirmation
+  </Card>
+  <Card title="Client-Side Signing" icon="key">
+    All transaction signing happens in your wallet
+  </Card>
+  <Card title="No Server Storage" icon="database">
+    Private keys never leave your device
+  </Card>
+</CardGroup>
+
+## Burner Wallet Strategy
+
+Use dedicated wallets with limited funds for DeFi interactions:
+
+<Steps>
+  <Step title="Create Burner Wallet">
+    Set up a new Solana wallet specifically for DeFi operations
+  </Step>
+  <Step title="Fund with Limited Amount">
+    Transfer only the amount you plan to trade (e.g., 10-50 SOL)
+  </Step>
+  <Step title="Connect to Bookie">
+    Use this burner wallet for all Bookie interactions
+  </Step>
+  <Step title="Keep Main Wallet Offline">
+    Store majority of holdings in cold storage or hardware wallet
+  </Step>
+</Steps>
+
+<Warning>
+  Never connect your main wallet (with significant holdings) to any DeFi application. Always use burner wallets with limited funds.
+</Warning>
+
+## Wallet Types by Security
+
+| Type | Security | Use Case |
+|------|----------|----------|
+| **Hardware Wallet** | Highest | Long-term storage, large holdings |
+| **Cold Wallet** | High | Offline storage, rarely accessed |
+| **Hot Wallet (Main)** | Medium | Regular transactions, moderate funds |
+| **Burner Wallet** | Low | DeFi interactions, limited funds |
+
+## Transaction Approval Checklist
+
+Before approving any transaction in your wallet, verify:
+
+- [ ] Token addresses match expected tokens
+- [ ] Amounts are correct (check decimals)
+- [ ] Recipient address is accurate (for transfers)
+- [ ] Slippage tolerance is reasonable
+- [ ] Transaction fee is expected (~0.000005 SOL)
+- [ ] No suspicious program interactions
+
+## Common Attack Vectors
+
+### Phishing
+
+Fake websites that mimic legitimate DeFi apps.
+
+**Protection:**
+- Bookmark official Bookie URL
+- Verify SSL certificate
+- Never click links in unsolicited messages
+
+### Malicious Transaction Approval
+
+Transactions that drain your wallet when approved.
+
+**Protection:**
+- Review all transaction details before approval
+- Use burner wallets with limited funds
+- Enable transaction simulation in wallet settings
+
+### Seed Phrase Theft
+
+Attackers trick users into revealing seed phrases.
+
+**Protection:**
+- Never share your seed phrase with anyone
+- Bookie will never ask for your seed phrase
+- Store seed phrases offline in secure location
+
+## Wallet Permissions
+
+When you connect to Bookie, you grant these permissions:
+
+| Permission | Purpose | Risk Level |
+|------------|---------|------------|
+| **View Address** | Display your wallet address | None |
+| **View Balances** | Show token holdings | None |
+| **Request Signatures** | Propose transactions for approval | Low (requires manual approval) |
+
+**Not Granted:**
+- Access to private keys
+- Automatic transaction signing
+- Ability to move funds without approval
+
+## Revoking Access
+
+To disconnect your wallet from Bookie:
+
+<Steps>
+  <Step title="Click Disconnect">
+    Use the disconnect button in Bookie interface
+  </Step>
+  <Step title="Revoke in Wallet">
+    Open wallet settings and revoke Bookie's connection
+  </Step>
+  <Step title="Clear Browser Data">
+    Clear cookies and local storage for complete removal
+  </Step>
+</Steps>
+
+## Security Recommendations
+
+<CardGroup cols={2}>
+  <Card title="Use Hardware Wallets" icon="usb">
+    Ledger or Trezor for maximum security
+  </Card>
+  <Card title="Enable 2FA" icon="lock">
+    Two-factor authentication on wallet accounts
+  </Card>
+  <Card title="Regular Audits" icon="magnifying-glass">
+    Review connected apps monthly
+  </Card>
+  <Card title="Update Software" icon="arrow-up">
+    Keep wallet software up to date
+  </Card>
+</CardGroup>
+
+## Incident Response
+
+If you suspect unauthorized access:
+
+1. **Immediately disconnect** wallet from all dApps
+2. **Transfer funds** to a new wallet with fresh seed phrase
+3. **Revoke all permissions** in wallet settings
+4. **Report incident** to wallet provider
+5. **Monitor transactions** for suspicious activity
+
+<Note>
+  Bookie's security model ensures that even if the Bookie website is compromised, your funds remain safe because private keys never leave your wallet.
+</Note>
+
+## Additional Resources
+
+<Card title="Solana Security Best Practices" icon="book" href="https://docs.solana.com/security">
+  Official Solana security guidelines
+</Card>

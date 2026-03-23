@@ -1,0 +1,111 @@
+---
+title: "Quickstart"
+description: "Start using Bookie in under 5 minutes"
+icon: "rocket"
+---
+
+Connect your wallet and execute your first DeFi operation using natural language.
+
+## Prerequisites
+
+- A Solana wallet (Phantom, Solflare, or Backpack)
+- SOL for transaction fees (minimum 0.01 SOL recommended)
+- Basic understanding of token swaps
+
+## Connect Your Wallet
+
+<Steps>
+  <Step title="Visit Bookie App">
+    Navigate to [bookiebot.dev](https://bookiebot.dev) in your browser
+  </Step>
+  <Step title="Click Connect Wallet">
+    Select your preferred Solana wallet from the connection modal
+  </Step>
+  <Step title="Approve Connection">
+    Authorize Bookie to view your wallet address (read-only access)
+  </Step>
+</Steps>
+
+## Execute Your First Swap
+
+Type a natural language command in the chat interface:
+
+```text
+Swap 1 SOL for USDC
+```
+
+Bookie will:
+1. Parse your intent and identify tokens
+2. Query Jupiter V6 for the optimal route
+3. Calculate expected output and price impact
+4. Present a transaction for your approval
+
+<Note>
+  All transactions require manual approval in your wallet. Bookie never has access to your private keys.
+</Note>
+
+## Example Commands
+
+```text
+Send 10 USDC to 7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
+```
+
+```text
+Show my portfolio balance
+```
+
+```text
+Swap 50 USDC for BONK with 1% slippage
+```
+
+```text
+What's the price of JUP?
+```
+
+## Understanding Transaction Flow
+
+| Step | Description | Time |
+|------|-------------|------|
+| **Intent Parsing** | NLP extracts tokens and amounts | ~40ms |
+| **Route Calculation** | Jupiter finds optimal swap path | ~110ms |
+| **Simulation** | Pre-flight check prevents failures | ~8ms |
+| **User Approval** | Manual confirmation in wallet | Variable |
+| **Execution** | Transaction broadcast to Solana | ~3ms |
+
+## Security Best Practices
+
+<Warning>
+  Use burner wallets with limited funds when interacting with any DeFi agent. Keep your main holdings in cold storage or hardware wallets.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Non-Custodial" icon="shield">
+    Bookie never accesses your private keys
+  </Card>
+  <Card title="Pre-Flight Simulation" icon="vial">
+    All transactions are simulated before execution
+  </Card>
+  <Card title="Manual Approval" icon="hand">
+    Every transaction requires your explicit confirmation
+  </Card>
+  <Card title="Transparent Routing" icon="route">
+    See exactly which pools your swap routes through
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Natural Language Commands" icon="message" href="/core-features/natural-language">
+    Learn advanced command syntax
+  </Card>
+  <Card title="Jupiter Integration" icon="route" href="/core-features/jupiter-integration">
+    Understand liquidity routing
+  </Card>
+  <Card title="Portfolio Tracking" icon="chart-line" href="/core-features/portfolio-tracking">
+    Monitor your holdings
+  </Card>
+  <Card title="Architecture" icon="sitemap" href="/introduction/architecture">
+    Explore system design
+  </Card>
+</CardGroup>

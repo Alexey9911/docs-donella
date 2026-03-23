@@ -1,0 +1,142 @@
+---
+title: "Jupiter V6 Integration"
+description: "Smart liquidity routing for optimal swap execution"
+icon: "route"
+---
+
+Bookie uses Jupiter V6 to aggregate liquidity across all Solana DEXs, ensuring best price execution with minimal slippage.
+
+## How Jupiter Routing Works
+
+Jupiter queries multiple liquidity sources simultaneously and calculates the optimal path for your swap.
+
+### Supported DEXs
+
+| DEX | Type | Liquidity |
+|-----|------|-----------|
+| Orca Whirlpools | CLAMM | High |
+| Raydium | AMM | High |
+| Meteora | DLMM | Medium |
+| Phoenix | CLOB | Medium |
+| Lifinity | Proactive MM | Low |
+
+## Route Optimization
+
+Jupiter evaluates multiple factors when selecting swap routes:
+
+<CardGroup cols={2}>
+  <Card title="Price Impact" icon="chart-line">
+    Minimizes price movement caused by your trade size
+  </Card>
+  <Card title="Liquidity Depth" icon="water">
+    Prioritizes pools with sufficient liquidity
+  </Card>
+  <Card title="Fee Structure" icon="coins">
+    Accounts for swap fees across different pools
+  </Card>
+  <Card title="Route Splitting" icon="split">
+    Divides large orders across multiple paths
+  </Card>
+</CardGroup>
+
+## Route Splitting Example
+
+For large swaps, Jupiter automatically splits orders to reduce price impact:
+
+**Trade:** 1000 SOL → USDC
+
+**Route:**
+- 600 SOL → USDC via Orca Whirlpool (0.3% fee)
+- 400 SOL → USDC via Raydium (0.25% fee)
+
+**Result:** 2.1% better execution than single-pool swap
+
+## Price Impact Calculation
+
+Price impact measures how much your trade moves the market price:
+
+| Impact | Interpretation |
+|--------|----------------|
+| < 0.1% | Negligible |
+| 0.1% - 1% | Low |
+| 1% - 3% | Moderate |
+| > 3% | High |
+
+<Warning>
+  Trades with >5% price impact may indicate insufficient liquidity. Consider splitting into smaller orders or using limit orders.
+</Warning>
+
+## Slippage Protection
+
+Slippage is the difference between expected and executed price.
+
+**Default Slippage:** 0.5% (50 basis points)
+
+**Calculation:**
+```typescript
+const minOutputAmount = expectedOutput * (1 - slippage);
+```
+
+If actual output falls below `minOutputAmount`, the transaction reverts.
+
+## MEV Protection
+
+Jupiter supports private transaction submission through Jito to prevent:
+
+- **Sandwich Attacks:** Bots front-run and back-run your trade
+- **Front-Running:** Bots execute before your transaction
+- **Back-Running:** Bots profit from price movement you create
+
+<Note>
+  MEV protection is enabled by default for swaps over 100 SOL or equivalent value.
+</Note>
+
+## Quote Refresh
+
+Jupiter quotes expire after 30 seconds due to price volatility. Bookie automatically refreshes quotes if:
+
+- User takes longer than 20 seconds to approve
+- Price moves more than 1% during approval
+- Network congestion delays transaction
+
+## API Integration
+
+Bookie uses Jupiter V6 SDK for route calculation:
+
+```typescript
+import { Jupiter } from '@jup-ag/core';
+
+const jupiter = await Jupiter.load({
+  connection,
+  cluster: 'mainnet-beta',
+  user: wallet.publicKey
+});
+
+const routes = await jupiter.computeRoutes({
+  inputMint: SOL_MINT,
+  outputMint: USDC_MINT,
+  amount: 5_000_000_000, // 5 SOL
+  slippageBps: 50
+});
+
+const bestRoute = routes.routesInfos[0];
+```
+
+## Performance Metrics
+
+| Metric | Value |
+|--------|-------|
+| Route Calculation | ~110ms |
+| Quote Refresh | ~85ms |
+| Supported Tokens | 15,000+ |
+| Average Routes Evaluated | 8-12 |
+
+## Supported Token Standards
+
+- **SPL Tokens:** Standard Solana tokens
+- **Token-2022:** New token standard with extensions
+- **Wrapped Assets:** wSOL, wBTC, wETH
+
+<Card title="Jupiter Documentation" icon="book" href="https://station.jup.ag/docs">
+  Learn more about Jupiter's routing algorithm
+</Card>

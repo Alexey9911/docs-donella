@@ -1,0 +1,91 @@
+---
+title: "Get Usage"
+api: "GET https://api.bookie.app/v1/analytics/usage"
+description: "Retrieve current billing period usage"
+---
+
+### Authorization
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token. Format: `Bearer bookie_live_abc123def456`
+</ParamField>
+
+### Response
+
+<ResponseField name="billingPeriod" type="object">
+  Current billing period dates
+</ResponseField>
+
+<ResponseField name="requests" type="object">
+  API request usage
+  
+  Properties:
+  - `used` (number): Requests used this period
+  - `limit` (number): Request limit for tier
+  - `percentage` (number): Usage percentage
+</ResponseField>
+
+<ResponseField name="transactions" type="object">
+  Transaction usage
+  
+  Properties:
+  - `used` (number): Transactions executed
+  - `limit` (number): Transaction limit for tier
+  - `percentage` (number): Usage percentage
+</ResponseField>
+
+<ResponseField name="tier" type="string">
+  Current subscription tier. Options: `free`, `pro`, `enterprise`
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url https://api.bookie.app/v1/analytics/usage \
+  --header 'Authorization: Bearer bookie_live_abc123def456'
+```
+
+```javascript Node.js
+const response = await fetch(
+  'https://api.bookie.app/v1/analytics/usage',
+  {
+    headers: {
+      'Authorization': `Bearer ${process.env.BOOKIE_API_KEY}`
+    }
+  }
+);
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.bookie.app/v1/analytics/usage',
+    headers={
+        'Authorization': f'Bearer {api_key}'
+    }
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 - Success
+{
+  "billingPeriod": {
+    "start": "2024-03-01T00:00:00Z",
+    "end": "2024-03-31T23:59:59Z"
+  },
+  "requests": {
+    "used": 2473,
+    "limit": 3600,
+    "percentage": 68.7
+  },
+  "transactions": {
+    "used": 847,
+    "limit": 1000,
+    "percentage": 84.7
+  },
+  "tier": "pro"
+}
+```
+</ResponseExample>

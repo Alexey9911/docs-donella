@@ -1,0 +1,88 @@
+---
+title: "Security"
+description: "Security practices and vulnerability reporting"
+icon: "shield"
+---
+
+Synthra takes security seriously. This document outlines our security practices and how to report vulnerabilities.
+
+## Data Protection
+
+### Encryption
+- **In Transit**: TLS 1.3 for all API communication
+- **At Rest**: AES-256 encryption for stored messages
+- **Keys**: Secure key management with automatic rotation
+
+### Data Retention
+
+| Data Type | Default Retention | Configurable |
+|-----------|------------------|--------------|
+| Messages | Not stored | Yes |
+| Sessions | 24 hours | Yes |
+| Logs | 30 days | Yes |
+
+## Authentication
+
+### API Keys
+- Generated with cryptographically secure random number generator
+- Hashed using bcrypt before storage
+- Never logged or exposed in error messages
+
+### JWT Tokens
+- Signed using RS256 algorithm
+- Short-lived access tokens (15 minutes)
+- Long-lived refresh tokens (30 days)
+
+## Authorization
+
+| Role | Permissions |
+|------|-------------|
+| **Read** | View sessions, read messages |
+| **Write** | Create sessions, send messages |
+| **Admin** | Full access, manage API keys |
+
+## Vulnerability Reporting
+
+### How to Report
+
+**DO NOT** create public GitHub issues for security vulnerabilities.
+
+Report via:
+1. **Email**: security@synthraai.dev
+2. **Subject**: "Security Vulnerability Report"
+
+### Include
+- Description of the vulnerability
+- Steps to reproduce
+- Potential impact
+- Suggested fix (if available)
+
+### Response Timeline
+- **Initial Response**: Within 48 hours
+- **Status Update**: Within 7 days
+- **Fix Timeline**: 
+  - Critical: 1-7 days
+  - High: 7-30 days
+  - Medium: 30-90 days
+
+## Security Best Practices
+
+```typescript
+// Good - Use environment variables
+const agent = new SynthraAgent({
+  apiKey: process.env.SYNTHRA_API_KEY
+});
+
+// Bad - Hardcoded keys
+const agent = new SynthraAgent({
+  apiKey: 'synthra_live_abc123def456'
+});
+```
+
+<Warning>
+  Never share your API keys publicly. If a key is compromised, revoke it immediately from the dashboard.
+</Warning>
+
+<Note>
+  For general security questions, contact security@synthraai.dev.
+</Note>

@@ -1,0 +1,131 @@
+---
+title: "Portfolio Tracking"
+description: "Real-time balance monitoring and transaction history"
+icon: "chart-line"
+---
+
+Bookie provides real-time visibility into your Solana wallet holdings, transaction history, and profit/loss tracking.
+
+## Balance Overview
+
+View all token balances in your connected wallet with current USD values.
+
+**Command:**
+```text
+Show my balance
+```
+
+**Response:**
+```
+SOL: 12.45 ($1,867.50)
+USDC: 5,432.10 ($5,432.10)
+BONK: 1,250,000 ($18.75)
+JUP: 89.32 ($71.46)
+
+Total Portfolio Value: $7,389.81
+```
+
+## Supported Queries
+
+<CardGroup cols={2}>
+  <Card title="Current Balances" icon="wallet">
+    Real-time token holdings with USD values
+  </Card>
+  <Card title="Transaction History" icon="clock-rotate-left">
+    Recent swaps, transfers, and interactions
+  </Card>
+  <Card title="PnL Tracking" icon="chart-mixed">
+    Profit and loss for individual positions
+  </Card>
+  <Card title="Price Alerts" icon="bell">
+    Notifications for significant price movements
+  </Card>
+</CardGroup>
+
+## Transaction History
+
+View your recent on-chain activity:
+
+**Command:**
+```text
+Show my transaction history
+```
+
+**Response:**
+| Time | Type | Details | Status |
+|------|------|---------|--------|
+| 2m ago | Swap | 5 SOL → 750 USDC | Confirmed |
+| 15m ago | Transfer | Sent 10 USDC | Confirmed |
+| 1h ago | Swap | 100 USDC → 2.5M BONK | Confirmed |
+
+## PnL Calculation
+
+Bookie tracks your cost basis and calculates unrealized gains/losses:
+
+**Example:**
+- Bought 100 JUP at $0.75 = $75 cost basis
+- Current price: $0.80
+- Current value: $80
+- **Unrealized PnL: +$5 (+6.67%)**
+
+<Note>
+  PnL tracking requires transaction history. Tokens acquired before connecting to Bookie use first-seen price as cost basis.
+</Note>
+
+## Price Monitoring
+
+Check current token prices without executing trades:
+
+**Commands:**
+```text
+What's the price of SOL?
+```
+
+```text
+Show me JUP price
+```
+
+```text
+How much is BONK worth?
+```
+
+## Data Sources
+
+Bookie aggregates data from multiple sources for accuracy:
+
+| Data Type | Source | Update Frequency |
+|-----------|--------|------------------|
+| Token Balances | Solana RPC | Real-time |
+| USD Prices | Jupiter Price API | 10 seconds |
+| Transaction History | Solana RPC | Real-time |
+| Token Metadata | Metaplex | Cached |
+
+## Performance
+
+- **Balance Refresh:** ~200ms
+- **Price Update:** ~150ms
+- **History Query:** ~300ms
+- **PnL Calculation:** ~50ms
+
+## Privacy
+
+All portfolio data is:
+- Queried directly from Solana RPC
+- Never stored on Bookie servers
+- Visible only to connected wallet owner
+- Cleared when wallet disconnects
+
+<Warning>
+  Portfolio tracking requires an active wallet connection. Disconnect your wallet to clear all cached data.
+</Warning>
+
+## Limitations
+
+- Historical PnL requires transaction history from connection date forward
+- Tokens acquired before first connection use current price as cost basis
+- NFT holdings are not currently tracked
+- Staked tokens shown separately from liquid balances
+
+<Card title="Solana Explorer" icon="magnifying-glass" href="https://solscan.io">
+  View detailed transaction history on Solscan
+</Card>

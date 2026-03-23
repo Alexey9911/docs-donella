@@ -1,0 +1,126 @@
+---
+title: "Get Portfolio"
+api: "GET https://api.bookie.app/v1/portfolio/{walletAddress}"
+description: "Retrieve wallet balances and token holdings"
+---
+
+### Authorization
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token. Format: `Bearer bookie_live_abc123def456`
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="walletAddress" type="string" required>
+  Solana wallet address. Format: Base58 encoded public key
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="includeNFTs" type="boolean" default="false">
+  Include NFT holdings in response
+</ParamField>
+
+<ParamField query="includeStaked" type="boolean" default="false">
+  Include staked tokens in response
+</ParamField>
+
+### Response
+
+<ResponseField name="walletAddress" type="string">
+  Solana wallet address
+</ResponseField>
+
+<ResponseField name="solBalance" type="number">
+  SOL balance in lamports
+</ResponseField>
+
+<ResponseField name="tokens" type="array">
+  Array of token holdings
+  
+  Each token object contains:
+  - `mint` (string): Token mint address
+  - `symbol` (string): Token symbol
+  - `balance` (number): Token balance in base units
+  - `decimals` (number): Token decimals
+  - `uiAmount` (number): Human-readable amount
+  - `usdValue` (number): USD value
+</ResponseField>
+
+<ResponseField name="totalValue" type="number">
+  Total portfolio value in USD
+</ResponseField>
+
+<ResponseField name="lastUpdated" type="string">
+  ISO 8601 timestamp of last update
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url https://api.bookie.app/v1/portfolio/7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU \
+  --header 'Authorization: Bearer bookie_live_abc123def456'
+```
+
+```javascript Node.js
+const response = await fetch(
+  'https://api.bookie.app/v1/portfolio/7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
+  {
+    headers: {
+      'Authorization': `Bearer ${process.env.BOOKIE_API_KEY}`
+    }
+  }
+);
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.bookie.app/v1/portfolio/7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
+    headers={
+        'Authorization': f'Bearer {api_key}'
+    }
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 - Success
+{
+  "walletAddress": "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+  "solBalance": 12450000000,
+  "tokens": [
+    {
+      "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "symbol": "USDC",
+      "balance": 5432100000,
+      "decimals": 6,
+      "uiAmount": 5432.10,
+      "usdValue": 5432.10
+    },
+    {
+      "mint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "symbol": "BONK",
+      "balance": 1250000000000,
+      "decimals": 5,
+      "uiAmount": 1250000,
+      "usdValue": 18.75
+    }
+  ],
+  "totalValue": 7389.81,
+  "lastUpdated": "2024-03-08T14:30:00Z"
+}
+```
+
+```json 404 - Not Found
+{
+  "error": {
+    "code": "wallet_not_found",
+    "message": "Wallet address does not exist or has no activity"
+  }
+}
+```
+</ResponseExample>

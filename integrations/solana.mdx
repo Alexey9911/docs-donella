@@ -1,0 +1,161 @@
+---
+title: "Solana Integration"
+description: "Native blockchain integration for transaction execution"
+icon: "link"
+---
+
+Bookie is built specifically for Solana, leveraging its high-throughput architecture for sub-second transaction execution.
+
+## Wallet Connection
+
+Bookie supports all major Solana wallets through the Wallet Adapter standard:
+
+<CardGroup cols={3}>
+  <Card title="Phantom" icon="ghost">
+    Most popular Solana wallet
+  </Card>
+  <Card title="Solflare" icon="fire">
+    Feature-rich mobile and browser wallet
+  </Card>
+  <Card title="Backpack" icon="bag-shopping">
+    Multi-chain wallet with Solana support
+  </Card>
+</CardGroup>
+
+## Connection Flow
+
+<Steps>
+  <Step title="User Clicks Connect">
+    Bookie triggers wallet adapter connection modal
+  </Step>
+  <Step title="Select Wallet">
+    User chooses their preferred wallet provider
+  </Step>
+  <Step title="Approve Connection">
+    Wallet prompts for read-only access approval
+  </Step>
+  <Step title="Connection Established">
+    Bookie receives public key and can query balances
+  </Step>
+</Steps>
+
+## Transaction Signing
+
+All transactions require explicit user approval in their wallet:
+
+```typescript
+const transaction = await buildSwapTransaction({
+  inputMint: SOL_MINT,
+  outputMint: USDC_MINT,
+  amount: 5_000_000_000
+});
+
+// User must approve in wallet
+const signature = await wallet.signAndSendTransaction(transaction);
+```
+
+<Warning>
+  Bookie never has access to your private keys. All transaction signing happens in your wallet, not in Bookie's code.
+</Warning>
+
+## RPC Configuration
+
+Bookie uses premium RPC providers for reliability and speed:
+
+| Provider | Endpoint | Features |
+|----------|----------|----------|
+| Helius | `https://mainnet.helius-rpc.com` | Priority access, WebSockets |
+| Triton | `https://solana-mainnet.rpc.triton.one` | High throughput |
+| QuickNode | `https://solana-mainnet.quiknode.pro` | Global CDN |
+
+## Network Selection
+
+Bookie supports multiple Solana networks:
+
+- **Mainnet Beta:** Production environment (default)
+- **Devnet:** Testing environment for developers
+- **Localnet:** Local validator for development
+
+## Token Standards
+
+Bookie supports all Solana token standards:
+
+<CardGroup cols={2}>
+  <Card title="SPL Tokens" icon="coins">
+    Standard Solana Program Library tokens
+  </Card>
+  <Card title="Token-2022" icon="sparkles">
+    New standard with transfer fees and extensions
+  </Card>
+  <Card title="Wrapped Assets" icon="box">
+    wSOL, wBTC, wETH bridged from other chains
+  </Card>
+  <Card title="NFTs" icon="image">
+    Metaplex NFT standard (view only)
+  </Card>
+</CardGroup>
+
+## Account Monitoring
+
+Bookie monitors your wallet for:
+
+- Balance changes
+- New token accounts
+- Incoming transfers
+- Transaction confirmations
+
+**Update Frequency:** Real-time via WebSocket subscriptions
+
+## Transaction Confirmation
+
+Bookie tracks transactions through multiple commitment levels:
+
+| Level | Description | Time |
+|-------|-------------|------|
+| **Processed** | Included in a block | ~400ms |
+| **Confirmed** | Confirmed by supermajority | ~13s |
+| **Finalized** | Cannot be rolled back | ~13s |
+
+**Default:** Confirmed (optimal balance of speed and security)
+
+## Compute Budget
+
+Bookie automatically sets optimal compute units for transactions:
+
+```typescript
+const computeUnitLimit = ComputeBudgetProgram.setComputeUnitLimit({
+  units: 200_000
+});
+
+const computeUnitPrice = ComputeBudgetProgram.setComputeUnitPrice({
+  microLamports: 1_000 // Priority fee
+});
+```
+
+## Error Handling
+
+Common Solana errors and how Bookie handles them:
+
+| Error | Cause | Bookie Response |
+|-------|-------|-----------------|
+| Insufficient SOL | Not enough for fees | Prompt to add SOL |
+| Slippage Exceeded | Price moved too much | Refresh quote and retry |
+| Blockhash Expired | Transaction took too long | Rebuild with new blockhash |
+| Account Not Found | Token account doesn't exist | Create account automatically |
+
+<Note>
+  Bookie automatically creates associated token accounts when needed. This adds ~0.002 SOL to transaction cost.
+</Note>
+
+## Performance Metrics
+
+| Metric | Value |
+|--------|-------|
+| RPC Latency (p50) | 45ms |
+| Transaction Broadcast | 3ms |
+| WebSocket Latency | 12ms |
+| Balance Query | 28ms |
+
+<Card title="Solana Documentation" icon="book" href="https://docs.solana.com">
+  Learn more about Solana's architecture
+</Card>

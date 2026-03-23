@@ -1,33 +1,120 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "API Introduction"
+description: "Getting started with the Bookie API"
+icon: "book"
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+The Bookie API provides programmatic access to intent parsing, transaction building, and portfolio tracking. Built on REST principles with JSON request/response format.
 
-## Welcome
+## Base URL
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```
+https://api.bookiebot.dev/v1
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All API requests require authentication via Bearer token:
+
+```bash
+Authorization: Bearer bookie_live_abc123def456
+```
+
+## Request Format
+
+```bash
+curl --request POST \
+  --url https://api.bookiebot.dev/v1/intents \
+  --header 'Authorization: Bearer bookie_live_abc123def456' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "walletAddress": "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+    "command": "Swap 5 SOL for USDC"
+  }'
+```
+
+## Response Format
+
+All responses follow a consistent structure:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
+{
+  "data": {},
+  "meta": {
+    "requestId": "req_abc123def456",
+    "timestamp": "2024-03-08T14:30:00Z"
   }
-]
+}
 ```
+
+## Error Responses
+
+```json
+{
+  "error": {
+    "code": "validation_error",
+    "message": "Invalid request parameters",
+    "details": {
+      "field": "walletAddress",
+      "reason": "Invalid Solana address format"
+    }
+  },
+  "meta": {
+    "requestId": "req_abc123def456",
+    "timestamp": "2024-03-08T14:30:00Z"
+  }
+}
+```
+
+## Rate Limits
+
+| Tier | Requests/min | Transactions/day |
+|------|-------------|------------------|
+| Free | 30 | 100 |
+| Pro | 120 | 1,000 |
+| Enterprise | 600 | Unlimited |
+
+Rate limit headers included in every response:
+
+```
+X-RateLimit-Limit: 120
+X-RateLimit-Remaining: 87
+X-RateLimit-Reset: 1709913600
+```
+
+## Pagination
+
+List endpoints support cursor-based pagination:
+
+```bash
+GET /v1/transactions?limit=50&cursor=tx_abc123def456
+```
+
+Response includes pagination metadata:
+
+```json
+{
+  "data": [],
+  "pagination": {
+    "hasMore": true,
+    "nextCursor": "tx_xyz789ghi012"
+  }
+}
+```
+
+## Versioning
+
+The API is versioned via URL path. Current version: v1
+
+Breaking changes will be released as new versions (v2, v3, etc.)
+
+## SDKs
+
+Official SDKs available:
+
+- TypeScript/JavaScript: `npm install @bookie-network/sdk`
+- Python: `pip install bookie-sdk`
+
+<Note>
+  API keys can be generated from the Developer Dashboard. Store keys securely and never expose them in client-side code.
+</Note>
