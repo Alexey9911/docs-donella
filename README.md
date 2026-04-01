@@ -62,7 +62,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing to the doc
 
 - [Bookie App](https://bookiebot.dev)
 - [GitHub](https://github.com/Bookiepmndrs/bookie-repo)
-- [Twitter](https://x.com/bookiedfi_bot)
+- [Twitter](https://x.com/BookieWeb3)
 - [Telegram](https://t.me/bookiedfi_bot)
 
 ## License
